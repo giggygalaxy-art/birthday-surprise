@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Birthday Surprise</title>
+
+<style>
+
+body{
+margin:0;
+background:black;
+color:#00ff9c;
+font-family:monospace;
+text-align:center;
+overflow:hidden;
+}
+
+#terminal{
+padding-top:100px;
+font-size:22px;
+}
+
+.birthdayTitle{
+font-size:48px;
+font-weight:bold;
+letter-spacing:4px;
+background:linear-gradient(45deg,#ff4d6d,#ffcc70,#00ff9c);
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+animation:glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes glow{
+from{
+text-shadow:0 0 10px #ff4d6d,0 0 20px #ff4d6d;
+}
+to{
+text-shadow:0 0 20px #00ff9c,0 0 40px #00ff9c;
+}
+}
+button{
+padding:10px 20px;
+font-size:18px;
+border:none;
+border-radius:8px;
+cursor:pointer;
+margin-top:20px;
+}
+
+#startBtn{
+background:#ff4d6d;
+color:white;
+}
+
+.page{
+display:none;
+padding-top:50px;
+}
+
+.frame{
+width:420px;
+height:420px;
+margin:auto;
+border:5px solid white;
+border-radius:12px;
+overflow:hidden;
+}
+
+.birthdayPic{
+width:220px;
+margin-top:20px;
+border-radius:15px;
+box-shadow:0 0 20px #ff4d6d;
+}
+
+.frame img{
+width:100%;
+height:100%;
+object-fit:cover;
+object-position:top;
+}
+
+#runBtn{background:#ff4d6d;color:white;}
+#yesBtn{background:#ff4d6d;color:white;}
+#noBtn{background:#4CAF50;color:white;}
+
+.hearts{
+position:fixed;
+bottom:-50px;
+font-size:24px;
+animation:float 6s linear infinite;
+}
+
+@keyframes float{
+0%{transform:translateY(0)}
+100%{transform:translateY(-100vh)}
+}
+
+.firework{
+position:fixed;
+width:6px;
+height:6px;
+background:yellow;
+border-radius:50%;
+animation:explode 1s ease-out forwards;
+}
+
+@keyframes explode{
+0%{transform:scale(1)}
+100%{transform:scale(20);opacity:0}
+}
+
+.birthdayLine{
+color:#ff4d6d;
+font-size:26px;
+font-weight:bold;
+text-shadow:0 0 10px #ff4d6d,0 0 20px #ff4d6d;
+}
+
+
+</style>
+
+</head>
+
+<body>
+
+<audio id="music" loop>
+<source src="birthday.mp3" type="audio/mpeg">
+</audio>
+
+<div id="terminal"></div>
+
+<button id="startBtn" onclick="startJourney()" style="display:none">
+Continue... ❤️
+</button>
+
+<div id="slideshowPage" class="page">
+
+<h2>Happy Birthday Gokulakkannaa ❤️</h2>
+
+<div class="frame">
+<img id="photo">
+</div>
+
+</div>
+
+<div id="messagePage" class="page">
+
+<h2>“You might be wondering… it’s your birthday, 
+    so why did my photo also come in the slideshow nu… right? 😏” 🤭</h2>
+
+<h2 style="font-size:22px;margin-top:30px;">
+Bcz want to tell you something based on this... 😏
+</h2>
+
+<h1 style="font-size:24px;margin-top:30px;color:#ff4d6d;">
+Naan vanthadhuku aprom dhan neeyum konjam azhaga agiruka <br><br>
+Un vazhkaiyum azhaga aagiruku ❤️
+</h1>
+
+<br><br>
+
+<button onclick="showMarriageQ()">Yes Agree ❤️</button>
+
+<button id="notBtn">Not at all 😏</button>
+
+<div id="hoverMsg2" style="margin-top:20px;font-size:20px;"></div>
+
+</div>
+<div id="q1" class="page">
+
+<h2>Have you ever wondered why you met me? 😏</h2>
+
+<button onclick="nextQ()">No</button>
+<button id="runBtn">Yes</button>
+
+<div id="hoverMsg" style="margin-top:20px;font-size:20px;"></div>
+
+</div>
+
+<div id="q2" class="page">
+
+<h2>Have you ever worried about marrying me? ❤️</h2>
+
+<button id="yesBtn" onclick="sad()">Yes</button>
+<button id="noBtn" onclick="love()">No</button>
+
+<div id="response" style="margin-top:20px;font-size:22px;"></div>
+<div id="gifBox" style="margin-top:20px;"></div>
+
+</div>
+
+<div id="unlockPage" class="page">
+
+<h2>One Last Question to Unlock the Game 🔐</h2>
+
+<h3>My name: </h3>
+
+<input type="text" id="answerBox" placeholder="Enter my name"
+style="padding:10px;font-size:18px;border-radius:6px;border:none;">
+
+<br><br>
+
+<button onclick="checkAnswer()">Unlock</button>
+
+<div id="unlockMsg" style="margin-top:20px;font-size:20px;"></div>
+
+</div>
+
+<div id="treasure" class="page">
+
+<h1 class="birthdayTitle">🎂✨ Happy Birthday GK ✨🎂</h1>
+
+<img src="gk.png" class="birthdayPic">
+
+<h1>Your birthday gift is waiting 😍🎁</h1>
+
+<h1>Treasure Hunt Begins...</h1>
+
+<h2 id="clue">Clue 1: Look where we cook - (additional clue- anjaraipetti) ☕</h2>
+
+<button onclick="nextClue()">Next...</button>
+
+</div>
+
+<script>
+
+const lines=[
+"> initializing birthday.exe",
+"> loading memories...",
+"> compiling love...",
+"> building happiness...",
+"> message for you :",
+"<span class='birthdayLine'>💖 Happy Birthday Gokulakkanna ❤️</span>"
+]
+
+let i=0
+let j=0
+let current=""
+
+function type(){
+
+if(i<lines.length){
+
+if(j<lines[i].length){
+
+current+=lines[i][j]
+document.getElementById("terminal").innerHTML=current
+j++
+
+setTimeout(type,40)
+
+}
+else{
+
+current += "<br><br>"
+i++
+j=0
+setTimeout(type,300)
+
+}
+
+}
+else{
+
+document.getElementById("startBtn").style.display="inline-block"
+
+}
+
+}
+
+type()
+
+function startJourney(){
+
+document.getElementById("music").play()
+
+document.getElementById("startBtn").style.display="none"
+document.getElementById("terminal").style.display="none"
+
+document.getElementById("slideshowPage").style.display="block"
+
+showPhotos()
+
+}
+
+const photos=[
+"pht1.jpg",
+"ph2.jpg",
+"phC1.jpg",
+"phC.jpg",
+"phC3.jpg",
+"phC6.jpg",
+"phAC.jpg",
+"phAC1.jpg",
+"phBM.jpg",
+"phH.jpg",
+"phA1.jpg",
+"phA2.jpg",
+"phA3.jpg",
+"phA4.jpg",
+"phA5.jpg",
+"phA6.jpg",
+"phGR1.jpg",
+"phGR2.jpg",
+"phGR3.jpg",
+"phGR4.jpg",
+"phGR5.jpg",
+"pic1.jpg",
+"ph70.jpg",
+"ph90.jpg",
+"ph100.jpg"
+]
+
+let index=0
+
+function showPhotos(){
+
+const img=document.getElementById("photo")
+
+img.style.opacity = 0
+
+setTimeout(()=>{
+    img.style.opacity = 1
+},200)
+
+img.src = photos[index]
+
+if(index < photos.length - 1){
+    index++
+    setTimeout(showPhotos,2500)
+
+}
+else{
+    setTimeout(showMessage,2500)
+    document.getElementById("music").pause()
+}
+}
+
+function showQ1(){
+
+document.getElementById("slideshowPage").style.display="none"
+document.getElementById("q1").style.display="block"
+
+}
+
+function nextQ(){
+
+document.getElementById("q1").style.display="none"
+document.getElementById("q2").style.display="block"
+
+}
+
+let hoverCount=0
+const runBtn=document.getElementById("runBtn")
+
+runBtn.addEventListener("mouseover",function(){
+
+hoverCount++
+
+const x=Math.random()*(window.innerWidth-100)
+const y=Math.random()*(window.innerHeight-50)
+
+runBtn.style.position="absolute"
+runBtn.style.left=x+"px"
+runBtn.style.top=y+"px"
+
+if(hoverCount>=5){
+
+document.getElementById("hoverMsg").innerHTML="😢 Looks like you dont have a choice.. click No!"
+
+}
+
+})
+
+function sad(){
+
+document.getElementById("response").innerHTML=
+"<h2 style='color:red'>Enna thavira unaku vazhka kuduka yarum ila !!</h2>"
+
+document.getElementById("gifBox").innerHTML =
+"<img src='beat.gif' width='250'>";
+
+}
+
+function showMarriageQ(){
+
+document.getElementById("messagePage").style.display="none"
+document.getElementById("q2").style.display="block"
+
+}
+
+function love(){
+
+document.getElementById("response").innerHTML =
+"<h2>I knew it! I love you ❤️</h2><button onclick='showUnlock()'>Next Surprise</button>";
+
+document.getElementById("gifBox").innerHTML =
+"<img src='love.gif' width='250'>";
+
+}
+
+function showTreasure(){
+
+document.getElementById("q2").style.display="none"
+document.getElementById("treasure").style.display="block"
+
+startFireworks()
+
+}
+
+const clues = [
+"Clue 1: Look where we drink coffee ☕",
+"Final Clue: Your gift is waiting inside the almirah 🎁"
+]
+
+let clueIndex=0
+
+function nextClue(){
+
+if(clueIndex < clues.length-1){
+
+clueIndex++
+document.getElementById("clue").innerText = clues[clueIndex]
+
+}
+else{
+
+document.getElementById("clue").innerText = "🎉 Treasure Found!"
+
+}
+
+}
+
+let hoverCount2 = 0;
+
+const notBtn = document.getElementById("notBtn");
+
+notBtn.addEventListener("mouseover", function(){
+
+hoverCount2++
+
+const x = Math.random() * (window.innerWidth - 120)
+const y = Math.random() * (window.innerHeight - 60)
+
+notBtn.style.position = "absolute"
+notBtn.style.left = x + "px"
+notBtn.style.top = y + "px"
+
+if(hoverCount2 >= 4){
+document.getElementById("hoverMsg2").innerHTML =
+"😜 Looks like you don't have a choice- click Yes Agree!"
+}
+
+});
+function startFireworks(){
+
+setInterval(()=>{
+
+let fw=document.createElement("div")
+fw.className="firework"
+
+fw.style.left=Math.random()*100+"vw"
+fw.style.top=Math.random()*80+"vh"
+
+document.body.appendChild(fw)
+
+setTimeout(()=>fw.remove(),1000)
+
+},500)
+
+}
+
+setInterval(()=>{
+
+let heart=document.createElement("div")
+heart.innerHTML="❤️"
+heart.className="hearts"
+
+heart.style.left=Math.random()*100+"vw"
+
+document.body.appendChild(heart)
+
+setTimeout(()=>heart.remove(),6000)
+
+},800)
+
+function showUnlock(){
+
+document.getElementById("q2").style.display="none"
+document.getElementById("unlockPage").style.display="block"
+
+}
+
+function checkAnswer(){
+
+let ans=document.getElementById("answerBox").value.toLowerCase()
+
+if(ans=="gulab" || ans =="stupenta"){
+
+document.getElementById("unlockPage").style.display="none"
+document.getElementById("treasure").style.display="block"
+startFireworks()
+
+}
+else{
+
+document.getElementById("unlockMsg").innerHTML=
+"❌ Wrong answer... Try again ❤️"
+
+}
+
+}
+
+function showMessage(){
+
+document.getElementById("slideshowPage").style.display="none"
+document.getElementById("messagePage").style.display="block"
+
+}
+
+</script>
+
+</body>
+</html>

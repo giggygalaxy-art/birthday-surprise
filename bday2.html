@@ -1,0 +1,157 @@
+
+Giggy Galaxy <giggygalaxy@gmail.com>
+4:44 PM (0 minutes ago)
+to me
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>Birthday Surprise</title>
+
+<style>
+
+body{
+background:#111;
+color:white;
+font-family:Arial;
+text-align:center;
+padding-top:60px;
+}
+
+img{
+width:300px;
+border-radius:10px;
+}
+
+button{
+padding:10px 20px;
+margin:10px;
+font-size:18px;
+cursor:pointer;
+border:none;
+border-radius:8px;
+}
+
+#yes{
+background:#ff4d6d;
+color:white;
+position:absolute;
+}
+
+#no{
+background:#4CAF50;
+color:white;
+}
+
+</style>
+</head>
+
+<body>
+
+<h1>Click for Surprise 🎉</h1>
+<button onclick="start()">Start</button>
+
+<div id="slideshow" style="display:none">
+<img id="photo">
+</div>
+
+<div id="question" style="display:none">
+<h2>Have you ever worried about marrying me? 😏</h2>
+<button id="yes">Yes</button>
+<button id="no" onclick="next()">No</button>
+</div>
+
+<div id="nickname" style="display:none">
+<h2>Tell me the name you use to call me ❤️</h2>
+<input id="answer">
+<button onclick="check()">Submit</button>
+</div>
+
+<div id="treasure" style="display:none">
+<h1>You passed the test 😍</h1>
+<p>You have a small treasure hunt to find your gift 🎁</p>
+</div>
+
+<script>
+
+const photos=[
+"pic1.jpg",
+"pic2.jpg",
+"pic3.jpg"
+]
+
+let index=0
+
+function start(){
+
+document.querySelector("button").style.display="none"
+
+document.getElementById("slideshow").style.display="block"
+
+showPhotos()
+
+}
+
+function showPhotos(){
+
+document.getElementById("photo").src=photos[index]
+
+index++
+
+if(index<photos.length){
+
+setTimeout(showPhotos,2000)
+
+}else{
+
+setTimeout(()=>{
+document.getElementById("slideshow").style.display="none"
+document.getElementById("question").style.display="block"
+},2000)
+
+}
+
+}
+
+function next(){
+
+document.getElementById("question").style.display="none"
+
+document.getElementById("nickname").style.display="block"
+
+}
+
+function check(){
+
+let ans=document.getElementById("answer").value.toLowerCase()
+
+if(ans==="gokul"){ // change to your nickname
+
+document.getElementById("nickname").style.display="none"
+
+document.getElementById("treasure").style.display="block"
+
+}else{
+
+alert("Wrong answer 😜 try again")
+
+}
+
+}
+
+const yesBtn=document.getElementById("yes")
+
+yesBtn.addEventListener("mouseover",function(){
+
+const x=Math.random()*window.innerWidth
+const y=Math.random()*window.innerHeight
+
+yesBtn.style.left=x+"px"
+yesBtn.style.top=y+"px"
+
+})
+
+</script>
+
+</body>
+</html>
